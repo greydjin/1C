@@ -1,0 +1,74 @@
+  - name: Ensure dependence 1C packages are installed.
+    apt:
+      name: "{{ packages_1c }}"
+      state: present
+      update_cache: yes
+
+  - name: Copy 1C server distrib files
+    copy:
+      src: "{{ item }}"
+      dest: /opt/
+    with_fileglob:
+      - deb/*.deb
+
+  - name: Install 1C Common
+    apt:
+      deb: /opt/1c-enterprise83-common_8.3.13-1513_amd64.deb
+      
+  - name: Install 1C Server
+    apt:
+      deb: /opt/1c-enterprise83-server_8.3.13-1513_amd64.deb
+
+  - name: Install WebService 1C
+    apt:
+      deb: /opt/1c-enterprise83-ws_8.3.13-1513_amd64.deb
+
+#  - name: Delete 1C deb packet
+#    file:
+#    path: /opt/*.deb
+#    state: absent
+
+  - name: Remove dependencies that are no longer required
+    apt:
+      autoremove: yes
+
+  - name: Add hostnmae in hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: "^{{ansible_hostname}}"
+      insertafter: EOF
+      line: "{{ansible_default_ipv4.address}}	{{ansible_hostname}}"
+      state: present
+
+  - name: chown /opt/1c
+    file: 
+      path: /opt/1C
+      recurse: yes
+      group: grp1cv{{version1c}}
+      owner: usr1cv{{version1c}}
+
+  - name: Fix /etc/init.d/srv1cvXX
+    lineinfile:
+      path: /etc/init.d/srv1cv{{version1c}}{{subversion1c}}
+      regexp: "^#!"
+      insertbefore: BOF
+      line: "#!/bin/bash"
+      state: present
+
+  - name: Start and Enable 1C-Server
+    systemd:
+      name: srv1cv{{version1c}}{{subversion1c}}
+      daemon-reload: yes
+      state: started
+      enabled: True
+
+  - name: Creates 1c-volume dir
+    file:
+      path: "{{ item.path }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      state: directory
+      mode: 0755
+    with_items:
+      - { path: "/mnt/1cshared", owner: usr1cv8, group: grp1cv8 }
+      - { path: "/mnt/ocr", owner: root, group: root }

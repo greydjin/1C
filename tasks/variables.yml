@@ -1,0 +1,34 @@
+---
+# Variable configuration.
+- name: Include OS-specific variables (Debian).
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  when: ansible_os_family == 'Debian'
+
+- name: Include OS-specific variables (RedHat).
+  include_vars: "{{ ansible_os_family }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  when: ansible_os_family == 'RedHat'
+
+- name: Define packages_1c.
+  set_fact:
+    packages_1c: "{{ __packages_1c | list }}"
+  when: packages_1c is not defined
+
+#- name: Define 1C_version.
+#  set_fact:
+#    1C_version: "{{ version1c }}"
+#  when: 1C_version is not defined
+
+#- name: Define 1C_data_dir.
+#  set_fact:
+#    1C_data_dir: "{{ __1C_data_dir }}"
+#  when: 1C_data_dir is not defined
+
+#- name: Define 1C_bin_path.
+#  set_fact:
+#    1C_bin_path: "{{ __1C_bin_path }}"
+#  when: 1C_bin_path is not defined
+
+#- name: Define 1C_config_path.
+#  set_fact:
+#    1C_config_path: "{{ __1C_config_path }}"
+#  when: 1C_config_path is not defined

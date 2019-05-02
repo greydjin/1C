@@ -1,0 +1,17 @@
+---
+# Variable configuration.
+- include_tasks: variables.yml
+
+# Setup/install tasks.
+- include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include_tasks: setup1C-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+#- include_tasks: initialize.yml
+#- include_tasks: configure.yml
+
+# Configure 1C
+#- import_tasks: databases.yml
+#- import_tasks: users.yml

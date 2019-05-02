@@ -1,0 +1,14 @@
+---
+__packages_1c:
+  - libwebkitgtk-3.0-0
+  - ttf-mscorefonts-installer
+  - libfontconfig1
+  - libgsf-1-114
+  - libglib2.0-0
+  - libodbc1
+  - libmagickwand-6.q16-3
+  - wget
+  - rsync
+  - curl
+  - apache2
+  - apt-transport-https

@@ -1,0 +1,15 @@
+# global variables
+
+#1C Server variables
+version1c: 8
+subversion1c: 3
+build1c: 1513
+
+#HTTPD
+httpd_version: 24
+httpd_ref: "manager 2017"
+httpd_wsdir: 1c
+httpd_path_1c: /var/www/1c
+
+#SAMBA
+#samba_users: [{username: admin, password: admin}, {username: user, password: user}]

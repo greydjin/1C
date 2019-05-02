@@ -1,0 +1,17 @@
+  - name: create new httpd dir for 1C
+    file:
+      path: "{{httpd_path_1c}}"
+      owner: apache
+      group: apache
+      state: directory
+      mode: 0755
+
+  - name: initialize 1c-webserver
+    shell: /opt/1C/v{{version1c}}.{{subversion1c}}/x86_64/webinst -apache{{httpd_version}} -wsdir {{httpd_wsdir}} -dir {{httpd_path_1c}} -connstr "Srvr={{ansible_hostname}};Ref=’{{httpd_ref}}’;" -confPath /etc/httpd/conf/httpd.conf
+    args:
+      creates: "{{httpd_path_1c}}/default.vrd"
+
+  - name: ReStart HTTPD Server
+    systemd:
+      name: apache2
+      state: restarted
